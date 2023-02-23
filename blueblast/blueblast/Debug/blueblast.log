@@ -1,0 +1,12 @@
+﻿  Game.cpp
+H:\UniWork\PG2D\Proj1\GitHub\BlueBlast\blueblast\blueblast\Game.cpp(34,82): warning C4244: 'argument': conversion from 'float' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+H:\UniWork\PG2D\Proj1\GitHub\BlueBlast\blueblast\blueblast\Game.cpp(34,46): warning C4244: 'argument': conversion from 'float' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+  blueblast.vcxproj -> H:\UniWork\PG2D\Proj1\GitHub\BlueBlast\blueblast\Debug\blueblast.exe
