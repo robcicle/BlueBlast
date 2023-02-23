@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SFML/Graphics.hpp"
+
 //dimensions in 2D that are whole numbers
 struct Dim2Di{ int x, y; };
 
