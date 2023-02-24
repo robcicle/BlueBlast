@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <sstream>
+#include <iomanip>
 #include <vector>
 
 #include "SFML/Graphics.hpp"
@@ -30,13 +32,13 @@ vector<vector<Object>> objMap
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::WIRE},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::WIRE},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 };
 
@@ -80,6 +82,10 @@ bool LoadTexture(const string& file, Texture& tex)
 // Player struct to hold information
 struct Player {
 	Sprite spr;
+	Sprite damage;
+	float stunnedTimer = 0.0f;
+	bool stunned = false;
+	int discs = 0;
 	int health = 3;
 	enum class Heading { UP, DOWN, LEFT, RIGHT } heading = Heading::RIGHT;
 } player;
@@ -94,7 +100,9 @@ void Game::Init()
 	LoadTexture("data/bg1.png", texBackgroundColor);
 	LoadTexture("data/bg2.png", texBackgroundFactory);
 	LoadTexture("data/disc.png", texDisc);
+	LoadTexture("data/wire.png", texWire);
 	LoadTexture("data/empty.png", tempTexEmpty);
+	LoadTexture("data/electrocute.png", texElectrocute);
 	if (!kenvectorFuture.loadFromFile("data/kenvector_future.ttf"))
 		assert(false);
 	if (!arial.loadFromFile("data/arial.ttf"))
@@ -136,6 +144,13 @@ void Game::Init()
 	playGameText = CentreText(playGameText);
 	playGameText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
 
+	gameTimerText.setFont(kenvectorFuture);
+	gameTimerText.setString("?.??");
+	gameTimerText.setCharacterSize(32);
+	gameTimerText.setFillColor(Color::Black);
+	gameTimerText = CentreText(gameTimerText);
+	gameTimerText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 20.f);
+
 	// Initialise the tiles within the game map
 	for (size_t y = 0; y < gameMap.size(); ++y)
 		for (size_t x = 0; x < gameMap[y].size(); ++x)
@@ -167,18 +182,22 @@ void Game::Init()
 			Object& t = objMap[y][x];
 			if (t.objectType == Object::ObjectType::EMPTY)
 			{
-				t.spr.setTexture(tempTexEmpty);
-				t.spr.setTextureRect({ 0, 0, 64, 64 });
+				if (isDebugging)
+				{
+					t.spr.setTexture(tempTexEmpty);
+					t.spr.setTextureRect({ 0, 0, 64, 64 });
+				}
+
 			}
 			else if (t.objectType == Object::ObjectType::DISC)
 			{
 				t.spr.setTexture(texDisc);
-				t.spr.setTextureRect({ 0, 184, 64, 64 });
+				t.spr.setTextureRect({ 0, 0, 64, 64 });
 			}
 			else if (t.objectType == Object::ObjectType::WIRE)
 			{
-				t.spr.setTexture(texWall);
-				t.spr.setTextureRect({ 0, 64, 64, 64 });
+				t.spr.setTexture(texWire);
+				t.spr.setTextureRect({ 0, 0, 64, 64 });
 			}
 			t.spr.setPosition(offset.x + x * t.spr.getGlobalBounds().width,
 				offset.y + y * t.spr.getGlobalBounds().height);
@@ -189,6 +208,9 @@ void Game::Init()
 	player.spr.setTextureRect(IntRect{ 4, 7, 44, 85 });
 	player.spr.setScale(1, 0.75f);
 	player.spr.setPosition(MapToScrn(1, 1));
+	player.damage.setTexture(texElectrocute);
+	player.damage.setScale(0, 0);
+	player.damage.setPosition(MapToScrn(1, 1));
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -201,8 +223,12 @@ void Game::Init()
 	sprHeart[2].setPosition(25 * 5, offset.y / 2.f);
 }
 
-void Game::UpdateGame(float timer)
+void Game::UpdateGame(RenderWindow& window, float timer)
 {
+	stringstream stream;
+
+	player.stunnedTimer += timer;
+
 	switch (gameState) 
 	{
 	case GameState::MAIN_MENU:
@@ -212,6 +238,12 @@ void Game::UpdateGame(float timer)
 		}
 		break;
 	case GameState::INGAME:
+		if (player.health > 0)
+		{
+			gameTimer += timer;
+			stream << fixed << std::setprecision(2) << gameTimer;
+			gameTimerText.setString(stream.str());
+		}
 		elapsed += timer;
 		// Get user input to change direction
 		if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
@@ -236,7 +268,7 @@ void Game::UpdateGame(float timer)
 			moving = true;
 		}
 
-		if (elapsed >= 0.5f)
+		if (elapsed >= 0.5f && player.health > 0)
 		{
 			elapsed = 0;
 			// Move regularly regardless of the input
@@ -261,8 +293,56 @@ void Game::UpdateGame(float timer)
 			if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(gameMap[0].size() - 1) &&
 				gameMap[mapPos.y][mapPos.x].tileType == Tile::TileType::GRASS && moving == true)
 			{
-				moving = false;
-				player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
+				// Again check if the move is not touching an object, depedent on the object the player may be harmed or awarded
+				if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(objMap[0].size() - 1) &&
+					objMap[mapPos.y][mapPos.x].objectType == Object::ObjectType::DISC && moving == true && player.stunned == false)
+				{
+					objMap[mapPos.y][mapPos.x].objectType = Object::ObjectType::EMPTY;
+
+					moving = false;
+
+					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
+					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
+
+					player.discs += 1;
+					UpdateObjectMap(window);
+				}
+				else if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(objMap[0].size() - 1) &&
+					objMap[mapPos.y][mapPos.x].objectType == Object::ObjectType::WIRE && moving && !player.stunned)
+				{
+					// The player is electrocuted 
+					player.stunned = true;
+					moving = false;
+
+					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
+					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
+
+					player.damage.setScale(1, 1);
+
+					player.health -= 1;
+					UpdateObjectMap(window);
+				}
+				else if(player.stunned && player.stunnedTimer >= 2.f)
+				{
+					moving = false;
+
+					player.stunnedTimer = 0.f;
+
+					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
+					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
+
+					player.damage.setScale(0, 0);
+
+					player.stunned = false;
+				}		
+				else  if (!player.stunned)
+				{
+					moving = false;
+
+					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
+					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
+
+				}
 			}
 		}
 		break;
@@ -294,15 +374,11 @@ void Game::RenderGame(RenderWindow& window)
 				Tile& t = gameMap[y][x];
 				window.draw(t.spr);
 			}
-		for (size_t y = 0; y < objMap.size(); ++y)
-			for (size_t x = 0; x < objMap[y].size(); ++x)
-			{
-				Object& t = objMap[y][x];
-				window.draw(t.spr);
-			}
 
+		UpdateObjectMap(window);
 		// Drawing sprites/text to the screen
 		window.draw(player.spr);
+		window.draw(player.damage);
 		break;
 	case GameState::ENDSCREEN:
 		break;
@@ -322,8 +398,51 @@ void Game::RenderGameHud(RenderWindow& window)
 			if (player.health >= i + 1)
 				window.draw(sprHeart[i]);
 		}
+		window.draw(gameTimerText);
+
+		if (player.health <= 0)
+		{
+			RectangleShape shape;
+			shape.setScale(500, 500);
+			shape.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.f);
+			shape.setFillColor(Color(0, 0, 0, 255));
+
+			window.draw(shape);
+		}
 		break;
 	case GameState::ENDSCREEN:
 		break;
 	}
+}
+
+void Game::UpdateObjectMap(RenderWindow& window)
+{
+	// Updating the textures in the object map incase a disc is picked up
+	for (size_t y = 0; y < objMap.size(); ++y)
+		for (size_t x = 0; x < objMap[y].size(); ++x)
+		{
+			Object& t = objMap[y][x];
+			if (t.objectType == Object::ObjectType::EMPTY)
+			{
+				if (isDebugging)
+				{
+					t.spr.setTexture(tempTexEmpty);
+					t.spr.setTextureRect({ 0, 0, 64, 64 });
+				}
+
+			}
+			else if (t.objectType == Object::ObjectType::DISC)
+			{
+				t.spr.setTexture(texDisc);
+				t.spr.setTextureRect({ 0, 0, 64, 64 });
+			}
+			else if (t.objectType == Object::ObjectType::WIRE)
+			{
+				t.spr.setTexture(texWire);
+				t.spr.setTextureRect({ 0, 0, 64, 64 });
+			}
+			t.spr.setPosition(offset.x + x * t.spr.getGlobalBounds().width,
+				offset.y + y * t.spr.getGlobalBounds().height);
+			window.draw(t.spr);
+		}
 }

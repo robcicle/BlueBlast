@@ -22,13 +22,17 @@ struct Game
 
 	sf::Vector2f offset{ 25, 25 };
 	bool moving = false;
+	bool isDebugging = false;
 	float elapsed = 0.0f;
+	float gameTimer = 0.0f;
 
 	sf::Texture texGrass;
 	sf::Texture texPlayer;
+	sf::Texture texElectrocute;
 	sf::Texture texWall;
-	sf::Texture texDisc;
 	sf::Texture texHeart;
+	sf::Texture texDisc;
+	sf::Texture texWire;
 	sf::Texture tempTexEmpty;
 	sf::Texture texBackgroundColor;
 	sf::Texture texBackgroundFactory;
@@ -43,13 +47,15 @@ struct Game
 
 	sf::Text gameNameText;
 	sf::Text playGameText;
+	sf::Text gameTimerText;
 
 	Tile tile;
 
 	void Init(); // Initialises the textures, sprites and 2D map
-	void UpdateGame(float timer);
+	void UpdateGame(sf::RenderWindow&, float timer);
 	void RenderGame(sf::RenderWindow& window);
 	void RenderGameHud(sf::RenderWindow& window);
+	void UpdateObjectMap(sf::RenderWindow& window);
 
 	sf::Vector2f MapToScrn(int x, int y);
 	sf::Vector2i ScrnToMap(const sf::Vector2f& scrnPos);

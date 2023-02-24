@@ -40,7 +40,7 @@ int main()
 		timer.restart();
 
 		// Updates the game
-		game.UpdateGame(elapsed);
+		game.UpdateGame(window, elapsed);
 
 		// Rendering goes here
 		game.RenderGame(window);
