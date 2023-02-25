@@ -20,6 +20,8 @@ int main()
 	Clock timer;
 	while (window.isOpen())
 	{
+		char key = -1;
+
 		// Process events
 		Event event;
 		while (window.pollEvent(event))
@@ -31,6 +33,10 @@ int main()
 			{
 				if (event.text.unicode == GC::ESCAPE_KEY)
 					window.close();
+				if (isdigit(event.text.unicode) || isalpha(event.text.unicode))
+					key = static_cast<char>(event.text.unicode);
+				else if (event.text.unicode == GC::BACKSPACE_KEY && !game.metrics.name.empty())
+					game.metrics.name = game.metrics.name.substr(0, game.metrics.name.length() - 1);
 			}
 		} 
 		// Clear screen
@@ -43,16 +49,10 @@ int main()
 		game.UpdateGame(window, elapsed);
 
 		// Rendering goes here
-		game.RenderGame(window);
-		game.RenderGameHud(window);
+		game.RenderGame(window, elapsed);
 
 		// Update the window
 		window.display();
-
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			window.close();
-		}
 	}
 
 	return EXIT_SUCCESS;

@@ -2,14 +2,100 @@
 #include <sstream>
 #include <iomanip>
 #include <vector>
+#include <string>
+#include <math.h>
+#include <fstream>
 
-#include "SFML/Graphics.hpp"
-#include "Utils.h"
 #include "Game.h"
 
 using namespace sf;
 using namespace std;
 
+void Metrics::SortAndUpdatePlayerData() {
+	PlayerData d{ name,time };
+	playerData.push_back(d);
+}
+
+
+bool Metrics::DBLoad(const std::string& path) 
+{
+
+	return false;
+}
+
+bool Metrics::FileSave(const std::string& path) 
+{
+
+	if (!path.empty())
+		filePath = path;
+	ofstream fs;
+	fs.open(filePath);
+	if (fs.is_open() && fs.good())
+	{
+		fs << VERSION;
+		for (size_t i = 0; i < playerData.size(); ++i)
+		{
+			fs << ' ' << playerData[i].name << ' ' << playerData[i].time;
+		}
+		assert(!fs.fail());
+		fs.close();
+	}
+	else
+	{
+		assert(false);
+		return false;
+	}
+	return true;
+}
+
+bool Metrics::DBSave(const std::string& path) 
+{
+
+	return false;
+}
+
+bool Metrics::FileLoad(const std::string& path) 
+{
+
+	assert(!path.empty());
+	filePath = path;
+	ifstream fs;
+	fs.open(filePath, ios::binary);
+	if (fs.is_open() && fs.good())
+	{
+		string version;
+		fs >> version;
+		if (version == VERSION)
+		{
+			playerData.clear();
+			while (!fs.eof()) {
+				PlayerData d;
+				fs >> d.name;
+				assert(!d.name.empty());
+				fs >> d.time;
+				assert(d.time >= 0);
+				playerData.push_back(d);
+			}
+		}
+		assert(!fs.fail());
+		fs.close();
+	}
+	return false;
+}
+
+bool Metrics::IsScoreInTopFive() 
+{
+	if (playerData.size() < 10)
+		return true;
+	return playerData.back().time < time;
+}
+
+void Metrics::Restart() 
+{
+	time = 0;
+}
+
+// This is the 2D map for the game itself
 vector<vector<Tile>> gameMap
 {
 	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_VERTICAL} },
@@ -21,11 +107,12 @@ vector<vector<Tile>> gameMap
 	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL} },
 	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL} },
 	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_VERTICAL} },
-	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS} },
-	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS} },
+	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL} },
+	{ {Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::GRASS},{Tile::TileType::WALL_VERTICAL} },
 	{ {Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL},{Tile::TileType::WALL_HORIZONTAL} }
 };
 
+// This is the 2D object map for the items/objects within the game
 vector<vector<Object>> objMap
 {
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
@@ -37,8 +124,8 @@ vector<vector<Object>> objMap
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::WIRE},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
-	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::WIRE},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::WIRE},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY} },
+	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::WIRE},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY},{Object::ObjectType::DISC},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 	{ {Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY},{Object::ObjectType::EMPTY} },
 };
 
@@ -54,7 +141,8 @@ Vector2i Game::ScrnToMap(const Vector2f& scrnPos)
 	return mapPos;
 }
 
-Text CentreText(Text text) 
+// Function used to centre text, made to shorten repition
+Text CentreText(Text text)
 {
 	Vector2f textCentre;
 	FloatRect textRect;
@@ -68,6 +156,7 @@ Text CentreText(Text text)
 	return text;
 }
 
+
 bool LoadTexture(const string& file, Texture& tex)
 {
 	if (tex.loadFromFile(file))
@@ -79,17 +168,19 @@ bool LoadTexture(const string& file, Texture& tex)
 	return false;
 }
 
-// Player struct to hold information
+// Player struct to hold information and create our player
 struct Player {
 	Sprite spr;
 	Sprite damage;
 	float stunnedTimer = 0.0f;
+	bool moving = false;
 	bool stunned = false;
 	int discs = 0;
 	int health = 3;
 	enum class Heading { UP, DOWN, LEFT, RIGHT } heading = Heading::RIGHT;
 } player;
 
+// Initialises the textures, sprites and 2D map
 void Game::Init()
 {
 	// Initialise for the textures and fonts
@@ -129,27 +220,121 @@ void Game::Init()
 	gameNameText.setCharacterSize(96);
 	gameNameText.setFillColor(Color::Blue);
 	gameNameText.setStyle(Text::Bold);
-
-	// Setting the origin to the centre
 	gameNameText = CentreText(gameNameText);
 	gameNameText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
 
-	// Title name text and styling
+	// Play game text and styling
 	playGameText.setFont(arial);
-	playGameText.setString("Press <space> to play!");
+	playGameText.setString("Press <space> to Play!");
 	playGameText.setCharacterSize(50);
 	playGameText.setFillColor(Color::White);
-
-	// Setting the origin to the centre
 	playGameText = CentreText(playGameText);
 	playGameText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
 
+	// Game timer text and styling
 	gameTimerText.setFont(kenvectorFuture);
-	gameTimerText.setString("?.??");
+	gameTimerText.setString("");
 	gameTimerText.setCharacterSize(32);
 	gameTimerText.setFillColor(Color::Black);
 	gameTimerText = CentreText(gameTimerText);
 	gameTimerText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 20.f);
+
+	// Disc timer text and styling
+	discText.setFont(kenvectorFuture);
+	discText.setCharacterSize(52);
+	discText.setFillColor(Color::Black);
+	discText.setPosition(85, offset.y / 0.6f);
+
+	scoreTitleText.setFont(arial);
+	scoreTitleText.setString("SCORES:");
+	scoreTitleText.setCharacterSize(40);
+	scoreTitleText.setFillColor(Color::White);
+	scoreTitleText.setStyle(Text::Bold);
+	scoreTitleText = CentreText(scoreTitleText);
+	scoreTitleText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 3.f);
+
+	scoreText.setFont(arial);
+	scoreText.setString("dogg - 32.14\ndogg2.0 - 12:24");
+	scoreText.setCharacterSize(35);
+	scoreText.setFillColor(Color::White);
+	scoreText.setStyle(Text::Bold);
+
+	Vector2f scoreTextCentre;
+	FloatRect scoreTextRect;
+
+	scoreTextRect = scoreText.getGlobalBounds();
+	scoreTextCentre.x = scoreTextRect.width / 2.0f;
+	scoreTextCentre.y = scoreTextRect.height;
+
+	scoreText.setOrigin(scoreTextCentre);
+	scoreText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.5f);
+
+
+	// End game text and styling
+	deadText.setFont(kenvectorFuture);
+	deadText.setString("YOU DIED");
+	deadText.setCharacterSize(96);
+	deadText.setFillColor(Color::White);
+	deadText.setStyle(Text::Bold);
+	deadText = CentreText(deadText);
+	deadText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
+
+	// Restart game text and styling
+	restartText.setFont(arial);
+	restartText.setString("Press <r> to Restart!");
+	restartText.setCharacterSize(50);
+	restartText.setFillColor(Color::White);
+	restartText.setStyle(Text::Bold);
+	restartText = CentreText(restartText);
+	restartText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+
+	shapeDeath.setSize(Vector2f((float)GC::SCREEN_RES.x, (float)GC::SCREEN_RES.y));
+	shapeDeath.setPosition(0, 0);
+	shapeDeath.setFillColor(sf::Color(0, 0, 0, 0));
+
+	InitLevel();
+
+	// Initialise the sprite for the player
+	player.spr.setTexture(texPlayer);
+	player.spr.setTextureRect(IntRect{ 4, 7, 44, 85 });
+	player.spr.setScale(1, 0.75f);
+	player.damage.setTexture(texElectrocute);
+
+	// Initialising and positioning sprites for UI
+	for (int i = 0; i < 3; i++)
+	{
+		sprHeart[i].setTexture(texHeart);
+		sprHeart[i].setScale(5, 5);
+	}
+
+	sprHeart[0].setPosition(offset.x, offset.y / 2.f);
+	sprHeart[1].setPosition(offset.x * 3, offset.y / 2.f);
+	sprHeart[2].setPosition(offset.x * 5, offset.y / 2.f);
+
+	sprDiscUi.setTexture(texDisc);
+	sprDiscUi.setPosition(30, offset.y / 0.45f);
+	sprDiscUi.setScale(0.65f, 0.65f);
+
+	metrics.Load("data/scores.txt", false);
+}
+
+// Initialises/reinitialises anything to do with the game and the beginning logic of it, 2D Object map, etc.
+void Game::InitLevel()
+{
+	curObjMap = objMap;
+
+	player.spr.setPosition(MapToScrn(1, 1));
+	player.damage.setScale(0, 0);
+	player.damage.setPosition(MapToScrn(1, 1));
+
+	player.stunnedTimer = 0.0f;
+	player.moving = false;
+	player.stunned = false;
+	player.discs = 0;
+	player.health = 3;
+	player.heading = Player::Heading::RIGHT;
+
+	levelDiscCount = 0;
 
 	// Initialise the tiles within the game map
 	for (size_t y = 0; y < gameMap.size(); ++y)
@@ -176,23 +361,26 @@ void Game::Init()
 		}
 
 	// Initialise the tiles within the object map
-	for (size_t y = 0; y < objMap.size(); ++y)
-		for (size_t x = 0; x < objMap[y].size(); ++x)
+	for (size_t y = 0; y < curObjMap.size(); ++y)
+		for (size_t x = 0; x < curObjMap[y].size(); ++x)
 		{
-			Object& t = objMap[y][x];
+			Object& t = curObjMap[y][x];
 			if (t.objectType == Object::ObjectType::EMPTY)
 			{
 				if (isDebugging)
-				{
-					t.spr.setTexture(tempTexEmpty);
-					t.spr.setTextureRect({ 0, 0, 64, 64 });
-				}
+					t.isVisible = true;
+				else
+					t.isVisible = false;
+
+				t.spr.setTexture(tempTexEmpty);
+				t.spr.setTextureRect({ 0, 0, 64, 64 });
 
 			}
 			else if (t.objectType == Object::ObjectType::DISC)
 			{
 				t.spr.setTexture(texDisc);
 				t.spr.setTextureRect({ 0, 0, 64, 64 });
+				levelDiscCount += 1;
 			}
 			else if (t.objectType == Object::ObjectType::WIRE)
 			{
@@ -203,31 +391,19 @@ void Game::Init()
 				offset.y + y * t.spr.getGlobalBounds().height);
 		}
 
-	// Initialise the sprite for the player
-	player.spr.setTexture(texPlayer);
-	player.spr.setTextureRect(IntRect{ 4, 7, 44, 85 });
-	player.spr.setScale(1, 0.75f);
-	player.spr.setPosition(MapToScrn(1, 1));
-	player.damage.setTexture(texElectrocute);
-	player.damage.setScale(0, 0);
-	player.damage.setPosition(MapToScrn(1, 1));
+	gameTimer = 0.0f;
+	timer = 0.0f;
+	tallyTimer = 0.0f;
 
-	for (int i = 0; i < 3; i++)
-	{
-		sprHeart[i].setTexture(texHeart);
-		sprHeart[i].setScale(5, 5);
-	}
+	discText.setString(to_string(player.discs) + "/" + to_string(levelDiscCount));
 
-	sprHeart[0].setPosition(25, offset.y / 2.f);
-	sprHeart[1].setPosition(25 * 3, offset.y / 2.f);
-	sprHeart[2].setPosition(25 * 5, offset.y / 2.f);
+	shapeDeath.setFillColor(Color(0, 0, 0, 0));
 }
 
-void Game::UpdateGame(RenderWindow& window, float timer)
+// Updates the logic of the game
+void Game::UpdateGame(RenderWindow& window, float elapsed)
 {
 	stringstream stream;
-
-	player.stunnedTimer += timer;
 
 	switch (gameState) 
 	{
@@ -236,41 +412,51 @@ void Game::UpdateGame(RenderWindow& window, float timer)
 		{
 			gameState = GameState::INGAME;
 		}
+		else if (Keyboard::isKeyPressed(Keyboard::Left))
+		{
+			gameState = GameState::DEAD_SCREEN;
+		}
 		break;
 	case GameState::INGAME:
-		if (player.health > 0)
+		// Timer keeps going until player is either dead or wins
+		if (player.health > 0 && player.discs < levelDiscCount)
 		{
-			gameTimer += timer;
-			stream << fixed << std::setprecision(2) << gameTimer;
+			gameTimer += elapsed;
+			stream << fixed << std::setprecision(0) << gameTimer;
 			gameTimerText.setString(stream.str());
+			gameTimerText = CentreText(gameTimerText);
+			tallyTimer = gameTimer;
 		}
-		elapsed += timer;
+
+		player.stunnedTimer += elapsed;
+		timer += elapsed;
+
 		// Get user input to change direction
 		if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
 		{
 			player.heading = Player::Heading::UP;
-			moving = true;
+			player.moving = true;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Down) || Keyboard::isKeyPressed(Keyboard::S))
 		{
 			player.heading = Player::Heading::DOWN;
-			moving = true;
+			player.moving = true;
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
 		{
 			player.heading = Player::Heading::LEFT;
-			moving = true;
+			player.moving = true;
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
 		{
 			player.heading = Player::Heading::RIGHT;
-			moving = true;
+			player.moving = true;
 		}
 
-		if (elapsed >= 0.5f && player.health > 0)
+		if (timer >= 0.5f && player.health > 0 && player.discs < levelDiscCount)
 		{
-			elapsed = 0;
+			timer = 0.f;
 			// Move regularly regardless of the input
 			Vector2i mapPos = ScrnToMap(player.spr.getPosition());
 			switch (player.heading)
@@ -291,28 +477,28 @@ void Game::UpdateGame(RenderWindow& window, float timer)
 
 			// Allow the move if the new position is within bounds
 			if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(gameMap[0].size() - 1) &&
-				gameMap[mapPos.y][mapPos.x].tileType == Tile::TileType::GRASS && moving == true)
+				gameMap[mapPos.y][mapPos.x].tileType == Tile::TileType::GRASS && player.moving == true)
 			{
 				// Again check if the move is not touching an object, depedent on the object the player may be harmed or awarded
-				if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(objMap[0].size() - 1) &&
-					objMap[mapPos.y][mapPos.x].objectType == Object::ObjectType::DISC && moving == true && player.stunned == false)
+				if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(curObjMap[0].size() - 1) &&
+					curObjMap[mapPos.y][mapPos.x].objectType == Object::ObjectType::DISC && player.moving == true && player.stunned == false)
 				{
-					objMap[mapPos.y][mapPos.x].objectType = Object::ObjectType::EMPTY;
+					curObjMap[mapPos.y][mapPos.x].objectType = Object::ObjectType::EMPTY;
 
-					moving = false;
+					player.moving = false;
 
 					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
 					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
 
 					player.discs += 1;
-					UpdateObjectMap(window);
+					discText.setString(to_string(player.discs) + "/" + to_string(levelDiscCount));
 				}
-				else if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(objMap[0].size() - 1) &&
-					objMap[mapPos.y][mapPos.x].objectType == Object::ObjectType::WIRE && moving && !player.stunned)
+				else if (mapPos.y >= 0 && mapPos.x >= 0 && mapPos.x < (int)(curObjMap[0].size() - 1) &&
+					curObjMap[mapPos.y][mapPos.x].objectType == Object::ObjectType::WIRE && player.moving && !player.stunned)
 				{
 					// The player is electrocuted 
 					player.stunned = true;
-					moving = false;
+					player.moving = false;
 
 					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
 					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
@@ -320,11 +506,10 @@ void Game::UpdateGame(RenderWindow& window, float timer)
 					player.damage.setScale(1, 1);
 
 					player.health -= 1;
-					UpdateObjectMap(window);
 				}
 				else if(player.stunned && player.stunnedTimer >= 2.f)
 				{
-					moving = false;
+					player.moving = false;
 
 					player.stunnedTimer = 0.f;
 
@@ -337,7 +522,7 @@ void Game::UpdateGame(RenderWindow& window, float timer)
 				}		
 				else  if (!player.stunned)
 				{
-					moving = false;
+					player.moving = false;
 
 					player.spr.setPosition(MapToScrn(mapPos.x, mapPos.y));
 					player.damage.setPosition(MapToScrn(mapPos.x, mapPos.y));
@@ -345,15 +530,55 @@ void Game::UpdateGame(RenderWindow& window, float timer)
 				}
 			}
 		}
+		else if (timer >= 5.f)
+		{
+			if (player.health <= 0)
+			{
+				metrics.time = 0.f;
+				gameState = GameState::DEAD_SCREEN;
+			}
+			else if (player.discs >= levelDiscCount)
+			{
+				metrics.time = tallyTimer;
+				gameState = GameState::WIN_SCREEN;
+			}
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::R))
+		{
+			InitLevel();
+		}
 		break;
-	case GameState::ENDSCREEN:
+	case GameState::DEAD_SCREEN:
+		if (Keyboard::isKeyPressed(Keyboard::R))
+		{
+			InitLevel();
+			gameState = GameState::MAIN_MENU;
+		}
+		break;
+	case GameState::WIN_SCREEN:
+		if (Keyboard::isKeyPressed(Keyboard::Space))
+		{
+			if (metrics.IsScoreInTopFive() && metrics.name.empty())
+				gameState = GameState::ENTER_NAME;
+			else
+			{
+				gameState = GameState::MAIN_MENU;
+				metrics.SortAndUpdatePlayerData();
+			}
+			InitLevel();
+		}
+		break;
+	case GameState::ENTER_NAME:
 		break;
 	}
 	
 }
 
-void Game::RenderGame(RenderWindow& window)
+// Renders out anything that needs to be rendered
+void Game::RenderGame(RenderWindow& window, float elapsed)
 {
+
 	switch (gameState)
 	{
 	case GameState::MAIN_MENU:
@@ -376,60 +601,71 @@ void Game::RenderGame(RenderWindow& window)
 			}
 
 		UpdateObjectMap(window);
+
 		// Drawing sprites/text to the screen
 		window.draw(player.spr);
 		window.draw(player.damage);
+
+		RenderGameHud(window, elapsed);
 		break;
-	case GameState::ENDSCREEN:
+	case GameState::DEAD_SCREEN:
+		window.draw(scoreText);
+		window.draw(scoreTitleText);
+		window.draw(restartText);
+		window.draw(deadText);
+		break;
+	case GameState::WIN_SCREEN:
+		break;
+	case GameState::ENTER_NAME:
 		break;
 	}
 }
 
-void Game::RenderGameHud(RenderWindow& window)
+// Renders out any of the HUD/UI, is it's own function and called after update to be layed on top of the game itself
+void Game::RenderGameHud(RenderWindow& window, float elapsed)
 {
-
-	switch (gameState)
+	for (int i = 0; i < 3; i++)
 	{
-	case GameState::MAIN_MENU:
-		break;
-	case GameState::INGAME:
-		for (int i = 0; i < 3; i++)
-		{
-			if (player.health >= i + 1)
-				window.draw(sprHeart[i]);
-		}
-		window.draw(gameTimerText);
+		if (player.health >= i + 1)
+			window.draw(sprHeart[i]);
+	}
 
-		if (player.health <= 0)
-		{
-			RectangleShape shape;
-			shape.setScale(500, 500);
-			shape.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.f);
-			shape.setFillColor(Color(0, 0, 0, 255));
+	window.draw(gameTimerText);
+	window.draw(sprDiscUi);
+	window.draw(discText);
 
-			window.draw(shape);
+	endTimer += elapsed;
+	if (player.health <= 0 || player.discs >= levelDiscCount)
+	{
+		if (endTimer >= 1.f)
+		{
+			endTimer = 0.f;
+
+			if (shapeDeath.getFillColor().a < 255)
+				shapeDeath.setFillColor(Color(0, 0, 0, shapeDeath.getFillColor().a + 51));
 		}
-		break;
-	case GameState::ENDSCREEN:
-		break;
+
+		window.draw(shapeDeath);
 	}
 }
 
+// Is to be called whenever a player picks up an item and the object map needs re-rendering to remove anything taken
 void Game::UpdateObjectMap(RenderWindow& window)
 {
 	// Updating the textures in the object map incase a disc is picked up
-	for (size_t y = 0; y < objMap.size(); ++y)
-		for (size_t x = 0; x < objMap[y].size(); ++x)
+	for (size_t y = 0; y < curObjMap.size(); ++y)
+		for (size_t x = 0; x < curObjMap[y].size(); ++x)
 		{
-			Object& t = objMap[y][x];
+			Object& t = curObjMap[y][x];
 			if (t.objectType == Object::ObjectType::EMPTY)
 			{
 				if (isDebugging)
-				{
-					t.spr.setTexture(tempTexEmpty);
-					t.spr.setTextureRect({ 0, 0, 64, 64 });
-				}
+					t.isVisible = true;
+				else
+					t.isVisible = false;
 
+				t.spr.setTexture(tempTexEmpty);
+				t.spr.setTextureRect({ 0, 0, 64, 64 });
 			}
 			else if (t.objectType == Object::ObjectType::DISC)
 			{
@@ -443,6 +679,8 @@ void Game::UpdateObjectMap(RenderWindow& window)
 			}
 			t.spr.setPosition(offset.x + x * t.spr.getGlobalBounds().width,
 				offset.y + y * t.spr.getGlobalBounds().height);
-			window.draw(t.spr);
+			
+			if (t.isVisible)
+				window.draw(t.spr);
 		}
 }
