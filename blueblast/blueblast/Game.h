@@ -18,7 +18,7 @@ Data about the game for high scores and possibly
 tracking stats about players
 */
 struct Metrics {
-	const std::string VERSION = "0.4";	// Current game version
+	const std::string VERSION = "1.0";	// Current game version
 	float time;				// Session time
 	std::string name;		// Current players name
 	bool useDB = true;		//database or text file?
@@ -103,7 +103,7 @@ struct Game
 	std::vector<std::vector<Object>> curObjMap; // Is used to set the current levels obj map, helps when restarting levels
 
 	// Game state so that we can differntiate between what needs to be run during which state
-	enum class GameState { MAIN_MENU, INGAME, DEAD_SCREEN, WIN_SCREEN, ENTER_NAME } gameState = GameState::MAIN_MENU;
+	enum class GameState { MAIN_MENU, INGAME, DEAD_SCREEN, WIN_SCREEN, ENTER_NAME, SCORE_SCREEN } gameState = GameState::MAIN_MENU;
 
 	sf::Vector2f offset{ 25, 25 }; // Offset of the 2D map, is used to correctly align other sprites
 
@@ -134,13 +134,20 @@ struct Game
 
 	sf::Text gameTimerText; // Ingame text used to display players current time within the level
 	sf::Text discText; // Ingame text used to display the players current disc count
+	sf::Text objectiveText; // Ingame text used to display the current objective to the player
+
+	sf::Text seeScoreText; // Endscreen text used to display how the player is able to see the scores
+	sf::Text deadText; // Endscreen text used to display the player has died
+
+	sf::Text proceedText; // Win screen text used to display how the player is able to proceed
+	sf::Text winText; // Win screen text used to display the player has completed the game
+
+	sf::Text nameText; // Text used to display the name the player is currently typing
+	sf::Text enterNameText; // Enter name text used to display the player should enter their name
 
 	sf::Text scoreTitleText; // Score title text
-	sf::Text scoreText; // Score text used to display the different player scores
-
-	sf::Text deadText; // Endscreen text used to display the player has died
-	sf::Text restartText; // Endscreen text used to display how to restart to the player
-
+	sf::Text scoreText[5]; // Score text used to display the different player scores
+	sf::Text restartText; // Score Screen text used to display how to restart to the player
 
 	sf::RectangleShape shapeDeath; // Used to fade the screen to black upon death
 
@@ -152,7 +159,7 @@ struct Game
 	window - need it to be able to draw things to the screen, get the resoultion of the window, etc.
 	elapsed - this is the frame time which is used for physics code, e.g. player movement
 	*/
-	void UpdateGame(sf::RenderWindow& window, float elapsed);
+	void UpdateGame(sf::RenderWindow& window, float elapsed, char key);
 	/* Draws out anything that needs to be rendered to the screen
 	window - need it to be able to draw things to the screen, get the resoultion of the window, etc.
 	elapsed - incase anything is rotating/being animated

@@ -85,9 +85,9 @@ bool Metrics::FileLoad(const std::string& path)
 
 bool Metrics::IsScoreInTopFive() 
 {
-	if (playerData.size() < 10)
+	if (playerData.size() < 5)
 		return true;
-	return playerData.back().time < time;
+	return playerData.back().time > time;
 }
 
 void Metrics::Restart() 
@@ -233,7 +233,6 @@ void Game::Init()
 
 	// Game timer text and styling
 	gameTimerText.setFont(kenvectorFuture);
-	gameTimerText.setString("");
 	gameTimerText.setCharacterSize(32);
 	gameTimerText.setFillColor(Color::Black);
 	gameTimerText = CentreText(gameTimerText);
@@ -245,30 +244,12 @@ void Game::Init()
 	discText.setFillColor(Color::Black);
 	discText.setPosition(85, offset.y / 0.6f);
 
-	scoreTitleText.setFont(arial);
-	scoreTitleText.setString("SCORES:");
-	scoreTitleText.setCharacterSize(40);
-	scoreTitleText.setFillColor(Color::White);
-	scoreTitleText.setStyle(Text::Bold);
-	scoreTitleText = CentreText(scoreTitleText);
-	scoreTitleText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 3.f);
-
-	scoreText.setFont(arial);
-	scoreText.setString("dogg - 32.14\ndogg2.0 - 12:24");
-	scoreText.setCharacterSize(35);
-	scoreText.setFillColor(Color::White);
-	scoreText.setStyle(Text::Bold);
-
-	Vector2f scoreTextCentre;
-	FloatRect scoreTextRect;
-
-	scoreTextRect = scoreText.getGlobalBounds();
-	scoreTextCentre.x = scoreTextRect.width / 2.0f;
-	scoreTextCentre.y = scoreTextRect.height;
-
-	scoreText.setOrigin(scoreTextCentre);
-	scoreText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.5f);
-
+	// Objective text and styling
+	objectiveText.setFont(kenvectorFuture);
+	objectiveText.setString("Objective: Find all the Discs");
+	objectiveText.setCharacterSize(16);
+	objectiveText.setFillColor(Color::Black);
+	objectiveText.setPosition(GC::SCREEN_RES.x - 350.f, offset.y);
 
 	// End game text and styling
 	deadText.setFont(kenvectorFuture);
@@ -279,6 +260,33 @@ void Game::Init()
 	deadText = CentreText(deadText);
 	deadText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
 
+	// See score text and styling
+	seeScoreText.setFont(arial);
+	seeScoreText.setString("Press <space> to see Scores!");
+	seeScoreText.setCharacterSize(50);
+	seeScoreText.setFillColor(Color::White);
+	seeScoreText.setStyle(Text::Bold);
+	seeScoreText = CentreText(seeScoreText);
+	seeScoreText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+	
+	// Win game text and styling
+	winText.setFont(kenvectorFuture);
+	winText.setString("YOU WIN");
+	winText.setCharacterSize(96);
+	winText.setFillColor(Color::White);
+	winText.setStyle(Text::Bold);
+	winText = CentreText(winText);
+	winText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
+
+	// Proceed to the next state text and styling
+	proceedText.setFont(arial);
+	proceedText.setString("Press <space> to proceed");
+	proceedText.setCharacterSize(50);
+	proceedText.setFillColor(Color::White);
+	proceedText.setStyle(Text::Bold);
+	proceedText = CentreText(proceedText);
+	proceedText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+
 	// Restart game text and styling
 	restartText.setFont(arial);
 	restartText.setString("Press <r> to Restart!");
@@ -288,6 +296,54 @@ void Game::Init()
 	restartText = CentreText(restartText);
 	restartText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
 
+	// Enter name text and styling
+	enterNameText.setFont(kenvectorFuture);
+	enterNameText.setString("ENTER YOUR NAME:");
+	enterNameText.setCharacterSize(84);
+	enterNameText.setFillColor(Color::White);
+	enterNameText.setStyle(Text::Bold);
+	enterNameText = CentreText(enterNameText);
+	enterNameText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
+
+	// Name typing text and styling
+	nameText.setFont(arial);
+	nameText.setString("_ _ _ _ _ _");
+	nameText.setCharacterSize(50);
+	nameText.setFillColor(Color::White);
+	nameText.setStyle(Text::Bold);
+	nameText = CentreText(nameText);
+	nameText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.f);
+
+	// Score Title text and styling
+	scoreTitleText.setFont(arial);
+	scoreTitleText.setString("SCORES:");
+	scoreTitleText.setCharacterSize(96);
+	scoreTitleText.setFillColor(Color::White);
+	scoreTitleText.setStyle(Text::Bold);
+	scoreTitleText = CentreText(scoreTitleText);
+	scoreTitleText.setPosition(GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
+
+	// For loop to loop through the array of score text and set the styling for each one
+	for (int i = 0; i < 5; i++)
+	{
+		scoreText[i].setFont(arial);
+		scoreText[i].setString("name - time.time");
+		scoreText[i].setCharacterSize(35);
+		scoreText[i].setFillColor(Color::White);
+		scoreText[i].setStyle(Text::Bold);
+
+		Vector2f scoreTextCentre;
+		FloatRect scoreTextRect;
+
+		scoreTextRect = scoreText[i].getGlobalBounds();
+		scoreTextCentre.x = scoreTextRect.width / 2.0f;
+		scoreTextCentre.y = scoreTextRect.height;
+
+		scoreText[i].setOrigin(scoreTextCentre);
+		scoreText[i].setPosition(GC::SCREEN_RES.x / 2.f, (GC::SCREEN_RES.y / 1.6f) - i * 50);
+	}
+
+	// Shape used to slowly fade the screen upon the end of the level
 	shapeDeath.setSize(Vector2f((float)GC::SCREEN_RES.x, (float)GC::SCREEN_RES.y));
 	shapeDeath.setPosition(0, 0);
 	shapeDeath.setFillColor(sf::Color(0, 0, 0, 0));
@@ -401,11 +457,11 @@ void Game::InitLevel()
 }
 
 // Updates the logic of the game
-void Game::UpdateGame(RenderWindow& window, float elapsed)
+void Game::UpdateGame(RenderWindow& window, float elapsed, char key)
 {
 	stringstream stream;
 
-	switch (gameState) 
+	switch (gameState)
 	{
 	case GameState::MAIN_MENU:
 		if (Keyboard::isKeyPressed(Keyboard::Space) || Keyboard::isKeyPressed(Keyboard::Enter))
@@ -507,7 +563,7 @@ void Game::UpdateGame(RenderWindow& window, float elapsed)
 
 					player.health -= 1;
 				}
-				else if(player.stunned && player.stunnedTimer >= 2.f)
+				else if (player.stunned && player.stunnedTimer >= 2.f)
 				{
 					player.moving = false;
 
@@ -519,7 +575,7 @@ void Game::UpdateGame(RenderWindow& window, float elapsed)
 					player.damage.setScale(0, 0);
 
 					player.stunned = false;
-				}		
+				}
 				else  if (!player.stunned)
 				{
 					player.moving = false;
@@ -550,10 +606,9 @@ void Game::UpdateGame(RenderWindow& window, float elapsed)
 		}
 		break;
 	case GameState::DEAD_SCREEN:
-		if (Keyboard::isKeyPressed(Keyboard::R))
+		if (Keyboard::isKeyPressed(Keyboard::Space))
 		{
-			InitLevel();
-			gameState = GameState::MAIN_MENU;
+			gameState = GameState::SCORE_SCREEN;
 		}
 		break;
 	case GameState::WIN_SCREEN:
@@ -563,26 +618,46 @@ void Game::UpdateGame(RenderWindow& window, float elapsed)
 				gameState = GameState::ENTER_NAME;
 			else
 			{
-				gameState = GameState::MAIN_MENU;
 				metrics.SortAndUpdatePlayerData();
+				gameState = GameState::SCORE_SCREEN;
 			}
-			InitLevel();
 		}
 		break;
 	case GameState::ENTER_NAME:
+		if (key != -1 && metrics.name.length() <= 12)
+			metrics.name += key;
+		if (metrics.name.size() > 1 && Keyboard::isKeyPressed(Keyboard::Return)) {
+			gameState = GameState::SCORE_SCREEN;
+			metrics.SortAndUpdatePlayerData();
+			metrics.Save();
+		}
+		nameText.setString(metrics.name);
+		nameText = CentreText(nameText);
+		break;
+	case GameState::SCORE_SCREEN:
+		metrics.Load("data/scores.txt", false);
+		InitLevel();
+
+		for (int i = 0; i < 5; i++)
+		{
+			if (metrics.playerData[i].name.empty())
+				scoreText[i].setString("#### - ##.#####");
+			else 
+				scoreText[i].setString(metrics.playerData[i].name + " - " + to_string(metrics.playerData[i].time) + "s");
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::R))
+			gameState = GameState::MAIN_MENU;
 		break;
 	}
-	
 }
 
 // Renders out anything that needs to be rendered
 void Game::RenderGame(RenderWindow& window, float elapsed)
 {
-
 	switch (gameState)
 	{
 	case GameState::MAIN_MENU:
-
 		// Drawing sprites/text to the screen
 		window.draw(sprBackgroundColor);
 		window.draw(sprBackgroundFactory);
@@ -591,6 +666,7 @@ void Game::RenderGame(RenderWindow& window, float elapsed)
 		window.draw(gameNameText);
 		break;
 	case GameState::INGAME:
+		// Drawing the background for the map
 		window.draw(sprBackground);
 		// Draw the 2D maps
 		for (size_t y = 0; y < gameMap.size(); ++y)
@@ -609,14 +685,24 @@ void Game::RenderGame(RenderWindow& window, float elapsed)
 		RenderGameHud(window, elapsed);
 		break;
 	case GameState::DEAD_SCREEN:
-		window.draw(scoreText);
-		window.draw(scoreTitleText);
-		window.draw(restartText);
+		window.draw(seeScoreText);
 		window.draw(deadText);
 		break;
 	case GameState::WIN_SCREEN:
+		window.draw(proceedText);
+		window.draw(winText);
 		break;
 	case GameState::ENTER_NAME:
+		window.draw(nameText);
+		window.draw(enterNameText);
+		break;
+	case GameState::SCORE_SCREEN:
+		window.draw(restartText);
+		for (int i = 0; i < 5; i++)
+		{
+			window.draw(scoreText[i]);
+		}
+		window.draw(scoreTitleText);
 		break;
 	}
 }
@@ -633,6 +719,7 @@ void Game::RenderGameHud(RenderWindow& window, float elapsed)
 	window.draw(gameTimerText);
 	window.draw(sprDiscUi);
 	window.draw(discText);
+	window.draw(objectiveText);
 
 	endTimer += elapsed;
 	if (player.health <= 0 || player.discs >= levelDiscCount)
