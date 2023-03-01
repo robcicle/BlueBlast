@@ -1,0 +1,29 @@
+[33mcommit 332a711335d704b9ccadfd088861a90726529888[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: robcicle <robbie.jack.atkin@gmail.com>
+Date:   Wed Mar 1 02:23:58 2023 +0000
+
+    v1.0 - Finished the scoring system plus the UI elements to go with it, ui for the win, end and enter name screen. The system is now able to read and write data to a file which in turn stores the scores for that game concurrently based off of the version of it. Added an objective to give clear indication to the player where to go. Optimized coding as much as I could to run optimally on all systems, bug testing has gone under way and at this point there is to be none that have been found. BlueBlast is at a stable point to call it v1.0 as it is playable, and as close to the finish product as wanted.
+
+[33mcommit 109c09146e1d16c3e6a9a3401ae96f284fef249a[m
+Author: robcicle <robbie.jack.atkin@gmail.com>
+Date:   Sat Feb 25 09:28:57 2023 +0000
+
+    v0.4 - Finished the gameplay aspect including, just finishing off the ending screens for winning losing, added database, adding ability to input name and then track and display data in an order from best to worst scores from the top five.
+
+[33mcommit 4ce6ef1b12aac6ed0e9a8ffe771b8af024a4f7bb[m
+Author: robcicle <robbie.jack.atkin@gmail.com>
+Date:   Fri Feb 24 00:13:57 2023 +0000
+
+    v0.3 - Added more elements towards the actual game, added the ability to pickup discs and be electrocuted by the wires. added a timer constantly ticking which will also account to end score. Last elements to do is to finish up the UI, add a few more levels with different exterior on each and then add in SQl to be able to track, add and manage the high scores.
+
+[33mcommit 068a8edc726345d48e3e078d056097507b264717[m
+Author: robcicle <robbie.jack.atkin@gmail.com>
+Date:   Thu Feb 23 22:27:19 2023 +0000
+
+    v0.2 - Added ui elements such as health, a main menu screen with a background and title text and a object map to be able to place objects along the grid but without interfering with the original game map
+
+[33mcommit d99b100fdb13e6d81a2d20097f83009592c946f2[m
+Author: robcicle <robbie.jack.atkin@gmail.com>
+Date:   Thu Feb 23 15:42:22 2023 +0000
+
+    v0.1 - Player movement, 2D Map, basic assets, INTRO/GAME/END screens.
