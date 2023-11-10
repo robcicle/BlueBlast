@@ -662,7 +662,7 @@ void Game::RenderGame(RenderWindow& window, float elapsed)
 		window.draw(sprBackgroundColor);
 		window.draw(sprBackgroundFactory);
 
-		//window.draw(playGameText);
+		window.draw(playGameText);
 		window.draw(gameNameText);
 		break;
 	case GameState::INGAME:
