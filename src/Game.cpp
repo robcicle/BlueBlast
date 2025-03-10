@@ -93,7 +93,6 @@ Game::Game()
 	LoadTexture("data/empty.png", tempTexEmpty);
 	LoadTexture("data/electrocute.png", texElectrocute);
 	assert(kenvectorFuture.openFromFile("data/kenvector_future.ttf"));
-	assert(arial.openFromFile("data/arial.ttf"));
 
 	// Initialize background
 	sprBackgroundColor = new sf::Sprite(texBackgroundColor);
@@ -108,22 +107,22 @@ Game::Game()
 
 	// Initialize text elements
 	InitText(gameNameText, kenvectorFuture, "BlueBlast", 96, sf::Color::Blue, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
-	InitText(playGameText, arial, "Press <space> to Play!", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+	InitText(playGameText, kenvectorFuture, "Press <space> to Play!", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
 	InitText(gameTimerText, kenvectorFuture, "", 32, sf::Color::Black, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 20.f);
 	InitText(discText, kenvectorFuture, "", 52, sf::Color::Black, 85, offset.y / 0.6f);
 	InitText(objectiveText, kenvectorFuture, "Objective: Find all the Discs", 16, sf::Color::Black, GC::SCREEN_RES.x - 350.f, offset.y);
 	InitText(deadText, kenvectorFuture, "YOU DIED", 96, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
-	InitText(seeScoreText, arial, "Press <space> to see Scores!", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+	InitText(seeScoreText, kenvectorFuture, "Press <space> to see Scores!", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
 	InitText(winText, kenvectorFuture, "YOU WIN", 96, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
-	InitText(proceedText, arial, "Press <space> to proceed", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
-	InitText(restartText, arial, "Press <r> to Restart!", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+	InitText(proceedText, kenvectorFuture, "Press <space> to proceed", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
+	InitText(restartText, kenvectorFuture, "Press <r> to Restart!", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 1.1f);
 	InitText(enterNameText, kenvectorFuture, "ENTER YOUR NAME:", 84, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
-	InitText(nameText, arial, "_ _ _ _ _ _", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.f);
-	InitText(scoreTitleText, arial, "SCORES:", 96, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
+	InitText(nameText, kenvectorFuture, "_ _ _ _ _ _", 50, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 2.f);
+	InitText(scoreTitleText, kenvectorFuture, "SCORES:", 96, sf::Color::White, GC::SCREEN_RES.x / 2.f, GC::SCREEN_RES.y / 5.f);
 
 	// Initialize score texts
 	for (int i = 0; i < 5; i++) {
-		InitText(scoreText[i], arial, "", 35, sf::Color::White, GC::SCREEN_RES.x / 2.f, (GC::SCREEN_RES.y / 1.6f) - i * 50);
+		InitText(scoreText[i], kenvectorFuture, "", 35, sf::Color::White, GC::SCREEN_RES.x / 2.f, (GC::SCREEN_RES.y / 1.6f) - i * 50);
 	}
 
 	// Screen fade effect
@@ -316,6 +315,7 @@ void Game::UpdateGame(float elapsed, char key)
 			sf::Vector2f screenPos = MapToScrn(newPos.x, newPos.y);
 			player->GetPlayerSprite()->setPosition(screenPos);
 			player->GetDamageSprite()->setPosition(screenPos);
+			discText->setString(std::to_string(player->GetDiscs()) + "/" + std::to_string(levelDiscCount));
 		}
 		else if (timer >= 5.f)
 		{
@@ -354,8 +354,14 @@ void Game::UpdateGame(float elapsed, char key)
 		break;
 
 	case GameState::ENTER_NAME:
-		if (key != -1 && metrics.name.length() <= 12)
+		if (key == GC::BACKSPACE_KEY && metrics.name.length() > 0)
+		{
+			metrics.name.pop_back();
+		}
+		else if (key != -1 && metrics.name.length() < 12)
+		{
 			metrics.name += key;
+		}
 		if (metrics.name.size() > 1 && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
 		{
 			gameState = GameState::SCORE_SCREEN;
@@ -402,12 +408,12 @@ void Game::RenderGame(sf::RenderWindow& window, float elapsed)
 		// Draw the game background
 		window.draw(*sprBackground);
 
-		// Draw the tile map efficiently
+		// Draw the tile map
 		for (const auto& row : gameMap)
 		{
 			for (const Tile& tile : row)
 			{
-				if (tile.spr)  // Ensure the sprite exists before drawing
+				if (tile.spr)
 					window.draw(*tile.spr);
 			}
 		}
@@ -459,8 +465,6 @@ void Game::RenderGame(sf::RenderWindow& window, float elapsed)
 	}
 }
 
-
-// Renders out any of the HUD/UI, is it's own function and called after update to be layed on top of the game itself
 void Game::RenderGameHud(sf::RenderWindow& window, float elapsed)
 {
 	for (int i = 0; i < 3; i++)
@@ -489,20 +493,19 @@ void Game::RenderGameHud(sf::RenderWindow& window, float elapsed)
 	}
 }
 
-// Is to be called whenever a player picks up an item and the object map needs re-rendering to remove anything taken
 void Game::UpdateObjectMap(sf::RenderWindow& window) {
 	for (size_t y = 0; y < curObjMap.size(); ++y) {
 		for (size_t x = 0; x < curObjMap[y].size(); ++x) {
 			Object& o = curObjMap[y][x];
 
 			if (objectTextures.find(o.objectType) != objectTextures.end()) {
-				delete o.spr; // Delete the old sprite to prevent memory leak
+				delete o.spr;
 				o.spr = new sf::Sprite(*objectTextures[o.objectType], sf::IntRect(sf::Vector2(0, 0), sf::Vector2(64, 64)));
 				o.spr->setPosition(sf::Vector2f(offset.x + x * o.spr->getGlobalBounds().size.x,
 					offset.y + y * o.spr->getGlobalBounds().size.y));
 			}
 			else if (o.objectType == Object::ObjectType::EMPTY && isDebugging) {
-				delete o.spr; // Delete the old sprite to prevent memory leak
+				delete o.spr;
 				o.spr = new sf::Sprite(tempTexEmpty, sf::IntRect(sf::Vector2(0, 0), sf::Vector2(64, 64)));
 				o.spr->setPosition(sf::Vector2f(offset.x + x * o.spr->getGlobalBounds().size.x,
 					offset.y + y * o.spr->getGlobalBounds().size.y));

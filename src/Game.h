@@ -66,7 +66,6 @@ private:
     sf::Sprite* sprBackground;
     sf::Sprite* sprDiscUi;
 
-    sf::Font arial;
     sf::Font kenvectorFuture;
 
     sf::Text* gameNameText;

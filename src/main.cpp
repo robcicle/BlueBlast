@@ -38,8 +38,6 @@ int main()
                 key = textEntered->unicode;
                 if (key == GC::ESCAPE_KEY)
                     window.close();
-                else if (key == GC::BACKSPACE_KEY && !game->metrics.name.empty())
-                    game->metrics.name = game->metrics.name.substr(0, game->metrics.name.length() - 1);
             }
         }
         // Clear screen
