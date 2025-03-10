@@ -1,5 +1,7 @@
 # BlueBlast
 
+[![Build](https://github.com/robcicle/BlueBlast/actions/workflows/build.yml/badge.svg)](https://github.com/robcicle/BlueBlast/actions/workflows/build.yml)
+
 **Level 4 Project**
 
 BlueBlast, a 2D game developed with the SFML library, served as a foundational project during my first year at university. This basic game revolves around maneuvering through a grid, navigating to avoid wires while collecting discs. The core objective is to achieve the lowest time possible, with the option to save and view scores.
