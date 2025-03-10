@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build-linux:
@@ -22,7 +19,7 @@ jobs:
       - name: Update package list and install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libsfml-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libvorbis-dev libogg-dev libflac-dev
+          sudo apt-get install -y libsfml-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libvorbis-dev libogg-dev libflac-dev libfreetype6-dev
 
       - name: Configure CMake
         run: cmake -S . -B build
@@ -31,7 +28,7 @@ jobs:
         run: cmake --build build
 
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: BlueBlast-Linux
           path: build/bin/
@@ -46,9 +43,6 @@ jobs:
       - name: Set up CMake
         uses: jwlawson/actions-setup-cmake@v1
 
-      - name: Install dependencies
-        run: choco install sfml
-
       - name: Configure CMake
         run: cmake -S . -B build
 
@@ -56,7 +50,7 @@ jobs:
         run: cmake --build build
 
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: BlueBlast-Windows
           path: build/bin/
