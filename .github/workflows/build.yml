@@ -22,10 +22,10 @@ jobs:
           sudo apt-get install -y libsfml-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libvorbis-dev libogg-dev libflac-dev libfreetype6-dev
 
       - name: Configure CMake
-        run: cmake -S . -B build
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
@@ -44,13 +44,13 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1
 
       - name: Configure CMake
-        run: cmake -S . -B build
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: BlueBlast-Windows
-          path: build/bin/
+          path: build/bin/Release/
