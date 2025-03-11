@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cassert>
 #include <fstream>
+#include <iostream>
 
 // This is the 2D map for the game itself
 std::vector<std::vector<Tile>> gameMap
@@ -92,7 +93,10 @@ Game::Game()
 	LoadTexture("data/wire.png", texWire);
 	LoadTexture("data/empty.png", tempTexEmpty);
 	LoadTexture("data/electrocute.png", texElectrocute);
-	assert(kenvectorFuture.openFromFile("data/kenvector_future.ttf"));
+	if (!kenvectorFuture.openFromFile("data/kenvector_future.ttf"))
+	{
+		assert(false);
+	}
 
 	// Initialize background
 	sprBackgroundColor = new sf::Sprite(texBackgroundColor);

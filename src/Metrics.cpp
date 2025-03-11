@@ -27,7 +27,10 @@ bool Metrics::Save(const std::string& path) {
 
             fs << ' ' << sanitized_name << ' ' << playerData[i].time;
         }
-        assert(!fs.fail());
+        if (fs.fail())
+        {
+            assert(false);
+        }
         fs.close();
     }
     else
@@ -40,7 +43,10 @@ bool Metrics::Save(const std::string& path) {
 
 bool Metrics::Load(const std::string& path)
 {
-    assert(!path.empty());
+    if (path.empty())
+    {
+        assert(false);
+    }
     filePath = path;
     std::ifstream fs;
     fs.open(filePath, std::ios::binary);
@@ -54,13 +60,22 @@ bool Metrics::Load(const std::string& path)
             while (!fs.eof()) {
                 PlayerData d;
                 fs >> d.name;
-                assert(!d.name.empty());
+                if (d.name.empty())
+                {
+                    assert(false);
+                }
                 fs >> d.time;
-                assert(d.time >= 0);
+                if (d.time < 0)
+                {
+                    assert(false);
+                }
                 playerData.push_back(d);
             }
         }
-        assert(!fs.fail());
+        if (fs.fail())
+        {
+            assert(false);
+        }
         fs.close();
         return true;
     }
